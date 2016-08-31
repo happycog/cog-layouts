@@ -540,7 +540,8 @@ $sc-constants: (
   $numberOfColumns: 0;
   $columnWidths: ();
   $gutterWidths: ();
-  $gutter: 20px;
+  $autolayoutDefaultGutter: 20px !default;
+  $gutter: $autolayoutDefaultGutter;
   $hasLeftGutter: false;
 
   @if str-slice($string, 1, 1) != '|'  {
