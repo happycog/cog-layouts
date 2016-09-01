@@ -1,6 +1,12 @@
-# coglayouts
+# Coglayouts
 
-Demo http://codepen.io/markhuot/pen/kXJjWR
+## Development
+`./cog` sass to start sass watch
+`./cog` go to start the local server
 
-`cog go` to run server
-`cog dev` to run sass watch
+## How to install
+Npm: `npm install coglayouts`
+Include the `coglayouts.scss` to your project using an @import
+
+## How to use
+[Codepen Example](http://codepen.io/markhuot/pen/kXJjWR)

@@ -1,0 +1,13 @@
+@import 'dist/coglayouts';
+$autolayoutDefaultGutter: 20px; // overwright default
+
+.layout-split-2 {
+  @include autolayout( '|[column]-[column]|');
+}
+
+.layout-split-2-70-30 {
+  @include autolayout( '|[column(70%)]-[column(30%)]|');
+}
+.layout-split-2-50-gutter {
+  @include autolayout( '|[column(70%)]-50px-[column(30%)]|');
+}
