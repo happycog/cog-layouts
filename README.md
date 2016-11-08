@@ -1,12 +1,52 @@
 # Coglayouts
 
-## Development
-`./cog` sass to start sass watch
-`./cog` go to start the local server
+## Learn more
+http://cognition.happycog.com/article/autolayout
 
 ## How to install
-Npm: `npm install coglayouts`
-Include the `coglayouts.scss` to your project using an @import
+With [yarn](https://github.com/yarnpkg/yarn) do:
 
-## How to use
+`yarn add coglayouts`
+
+With [npm](https://github.com/npm/npm) do:
+
+`npm install -g coglayouts`
+
+## Usage
+
+HTML
+```
+<section class="layout-split-2--sidebar">
+  <main class="column">
+  ...
+  </main>
+  <aside class="column">
+  ...
+  </aside>
+</section>
+```
+
+SASS
+
+`@import 'node_modules/dist/coglayouts';`
+
+Custom Gutter
+```
+@import 'node_modules/dist/coglayouts';
+// This line below will overwrite the default gutter of 20px;
+$autolayoutDefaultGutter: 100px;
+```
+
+
+SASS Module
+```
+.layout-split-2 {
+  @include autolayout('|-[column]-[column]-|');
+  &--sidebar {
+    @include autolayout('|-[column(70%)]-[column(30%)]-|');
+  }
+}
+```
+
+## Example
 [Codepen Example](http://codepen.io/markhuot/pen/kXJjWR)
