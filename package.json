@@ -1,5 +1,5 @@
 {
-  "name": "coglayouts",
+  "name": "cog-layouts",
   "version": "1.0.1",
   "description": "Simple layout grid",
   "main": "index.js",
@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/happycog/coglayouts.git"
+    "url": "git+https://github.com/happycog/cog-layouts.git"
   },
   "author": "Happy Cog",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/happycog/coglayouts/issues"
+    "url": "https://github.com/happycog/cog-layouts/issues"
   },
-  "homepage": "https://github.com/happycog/coglayouts#readme"
+  "homepage": "https://github.com/happycog/cog-layouts#readme"
 }
