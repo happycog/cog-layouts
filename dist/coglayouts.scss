@@ -622,17 +622,28 @@ $sc-constants: (
       $leftGutter: nth($gutterWidths, $i);
       $rightGutter: nth($gutterWidths, $i + 1);
 
+      // if we're not the first column add half a gutter to the left
       @if $i != 1 {
         $leftGutter: $leftGutter / 2;
       }
 
+      // if we're not the last column add half a gutter to the right
       @if $i != $numberOfColumns {
         $rightGutter: $rightGutter / 2;
       }
 
+      // if the width is auto, determine it based on the number of columns
       $widthString: percentage(1 / $numberOfColumns);
       @if nth($columnWidths, $i) != 'auto' {
         $widthString: nth($columnWidths, $i);
+      }
+
+      // if the width is written as a fraction, figure it out
+      $fractionPos: str-index($widthString, '/');
+      @if ($fractionPos) {
+        $numerator: to-number(unquote(str-slice($widthString, 0, $fractionPos - 1)));
+        $denominator: to-number(unquote(str-slice($widthString, $fractionPos + 1)));
+        $widthString: percentage($numerator / $denominator);
       }
 
       width: calc(#{$widthString} - #{$leftGutter} - #{$rightGutter});
