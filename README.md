@@ -6,11 +6,11 @@ http://cognition.happycog.com/article/autolayout
 ## How to install
 With [yarn](https://github.com/yarnpkg/yarn) do:
 
-`yarn add coglayouts`
+`yarn add cog-layouts`
 
 With [npm](https://github.com/npm/npm) do:
 
-`npm install -g coglayouts`
+`npm install -g cog-layouts`
 
 ## Usage
 
