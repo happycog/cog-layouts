@@ -535,6 +535,19 @@ $sc-constants: (
   @return ($number * nth($units, $index));
 }
 
+@function check-width-for-fraction($widthString) {
+  @if (type-of($widthString) == 'string') {
+    $fractionPos: str-index($widthString, '/');
+    @if ($fractionPos) {
+      $numerator: to-number(unquote(str-slice($widthString, 0, $fractionPos - 1)));
+      $denominator: to-number(unquote(str-slice($widthString, $fractionPos + 1)));
+      $widthString: percentage($numerator / $denominator);
+    }
+  }
+
+  @return $widthString;
+}
+
 @mixin autolayout($string) {
   $length: str-length($string);
   $numberOfColumns: 0;
@@ -543,6 +556,7 @@ $sc-constants: (
   $autolayoutDefaultGutter: 20px !default;
   $gutter: $autolayoutDefaultGutter;
   $hasLeftGutter: false;
+  $shiftAmount: "";
 
   @if str-slice($string, 1, 1) != '|'  {
     @error 'Autolayout must start with `|`';
@@ -551,22 +565,26 @@ $sc-constants: (
     @error 'Autolayout must end with `|`';
   }
 
-  @if str-slice($string, 2, 2) != '-' {
-    $gutterWidths: append($gutterWidths, 0px);
-  }
+  // @if str-slice($string, 2, 2) != '-' {
+  //   $gutterWidths: append($gutterWidths, 0px);
+  // }
 
   @for $i from 2 through $length - 1 {
     $ch: str-slice($string, $i, $i);
     $nextCh: str-slice($string, $i + 1, $i + 1);
+    @if $ch == '<' {
+      $shiftChunk: str-slice($string, $i);
+      $gt: str-index($shiftChunk, '>');
+      $shiftAmount: str-slice($shiftChunk, 2, $gt - 1);
+    }
     @if $ch == '[' {
+      @if length($gutterWidths) == 0 {
+        $gutterWidths: append($gutterWidths, 0px);
+      }
       $columnChunk: str-slice($string, $i);
-      $paren: str-index($columnChunk, '(');
       $bracket: str-index($columnChunk, ']');
-      $className: str-slice($string, $i + 1, $i + $bracket - 2);
-      @if $paren and $paren < $bracket {
-        $className: str-slice($string, $i + 1, $i + $paren - 2);
-        $closingParen: str-index($columnChunk, ')');
-        $widthString: str-slice($columnChunk, $paren + 1, $closingParen - 1);
+      @if $bracket != 2 {
+        $widthString: str-slice($columnChunk, 2, $bracket - 1);
         $columnWidths: append($columnWidths, unquote($widthString));
       }
       @else {
@@ -595,12 +613,27 @@ $sc-constants: (
       @else if str-slice($string, $i - 1, $i - 1) == '|' {
         $gutterWidths: append($gutterWidths, $gutter);
       }
+      @else if str-slice($string, $i - 1, $i - 1) == '>' {
+        $gutterWidths: append($gutterWidths, $gutter);
+      }
+      // @else if str-slice($string, $i - 1, $i - 1) == '|' {
+      //   $gutterWidths: append($gutterWidths, $gutter);
+      // }
+      // @else if $bracket == 2 {
+      //   $gutterWidths: append($gutterWidths, $gutter);
+      // }
     }
   }
 
-  @if str-slice($string, $length - 1, $length - 1) != '-' {
+  @if length($gutterWidths) != $numberOfColumns + 1 {
     $gutterWidths: append($gutterWidths, 0px);
   }
+
+  @debug $gutterWidths;
+
+  // @if str-slice($string, $length - 1, $length - 1) != '-' {
+  //   $gutterWidths: append($gutterWidths, 0px);
+  // }
 
   @if $numberOfColumns == 0 {
     @error 'No columns detected!';
@@ -639,16 +672,21 @@ $sc-constants: (
       }
 
       // if the width is written as a fraction, figure it out
-      $fractionPos: str-index($widthString, '/');
-      @if ($fractionPos) {
-        $numerator: to-number(unquote(str-slice($widthString, 0, $fractionPos - 1)));
-        $denominator: to-number(unquote(str-slice($widthString, $fractionPos + 1)));
-        $widthString: percentage($numerator / $denominator);
-      }
+      $widthString: check-width-for-fraction($widthString);
 
-      width: calc(#{$widthString} - #{$leftGutter} - #{$rightGutter});
-      margin-left: $leftGutter;
+      // check for fractions in the shiftAmount
+      $shiftAmount: check-width-for-fraction($shiftAmount);
+      $dividedShiftAmount: to-number($shiftAmount) / $numberOfColumns;
+
+      width: calc(#{$widthString} - #{$leftGutter} - #{$rightGutter} - #{$dividedShiftAmount});
       margin-right: $rightGutter;
+
+      @if $shiftAmount and $i == 1 {
+        margin-left: calc(#{$shiftAmount} + #{$leftGutter});
+      }
+      @else {
+        margin-left: $leftGutter;
+      }
 
       @if $i == 1 {
         clear: left;
