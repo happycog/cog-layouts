@@ -41,9 +41,10 @@ $autolayoutDefaultGutter: 100px;
 SASS Module
 ```
 .layout-split-2 {
-  @include autolayout('|-[column]-[column]-|');
+  @include autolayout('|-[]-[]-|');
   &--sidebar {
-    @include autolayout('|-[column(70%)]-[column(30%)]-|');
+    @include autolayout('|-[75%]-[25%]-|');
+    @include autolayout('|-[3/4]-[1/4]-|');
   }
 }
 ```
